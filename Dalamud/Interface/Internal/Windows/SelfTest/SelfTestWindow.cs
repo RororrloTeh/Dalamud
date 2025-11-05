@@ -36,12 +36,12 @@ internal class SelfTestWindow : Window
     /// <summary>
     /// Initializes a new instance of the <see cref="SelfTestWindow"/> class.
     /// </summary>
-    public SelfTestWindow()
+    public SelfTestWindow(SelfTestRegistry registry)
         : base("Dalamud Self-Test", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
     {
-        this.selfTestRegistry = Service<SelfTestRegistry>.Get();
-        this.Size = new Vector2(800, 800);
-        this.SizeCondition = ImGuiCond.FirstUseEver;
+        this.selfTestRegistry = registry;
+        this.Size             = new Vector2(800, 800);
+        this.SizeCondition    = ImGuiCond.FirstUseEver;
 
         this.RespectCloseHotkey = false;
     }

@@ -33,6 +33,7 @@ using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using Dalamud.Logging.Internal;
 using Dalamud.Plugin.Internal;
+using Dalamud.Plugin.SelfTest.Internal;
 using Dalamud.Storage.Assets;
 using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
@@ -104,7 +105,8 @@ internal class DalamudInterface : IInternalDisposableService
         TitleScreenMenu titleScreenMenu,
         GameGui gameGui,
         ConsoleManager consoleManager,
-        AddonLifecycle addonLifecycle)
+        AddonLifecycle addonLifecycle,
+        SelfTestRegistry registry)
     {
         this.dalamud = dalamud;
         this.configuration = configuration;
@@ -112,16 +114,16 @@ internal class DalamudInterface : IInternalDisposableService
 
         this.WindowSystem = new WindowSystem("DalamudCore");
 
-        this.colorDemoWindow = new ColorDemoWindow() { IsOpen = false };
-        this.componentDemoWindow = new ComponentDemoWindow() { IsOpen = false };
-        this.dataWindow = new DataWindow() { IsOpen = false };
-        this.gamepadModeNotifierWindow = new GamepadModeNotifierWindow() { IsOpen = false };
-        this.consoleWindow = new ConsoleWindow(configuration) { IsOpen = configuration.LogOpenAtStartup };
-        this.pluginStatWindow = new PluginStatWindow() { IsOpen = false };
-        this.pluginWindow = new PluginInstallerWindow(pluginImageCache, configuration) { IsOpen = false };
-        this.settingsWindow = new SettingsWindow() { IsOpen = false };
-        this.selfTestWindow = new SelfTestWindow() { IsOpen = false };
-        this.styleEditorWindow = new StyleEditorWindow() { IsOpen = false };
+        this.colorDemoWindow           = new ColorDemoWindow() { IsOpen                                      = false };
+        this.componentDemoWindow       = new ComponentDemoWindow() { IsOpen                                  = false };
+        this.dataWindow                = new DataWindow() { IsOpen                                           = false };
+        this.gamepadModeNotifierWindow = new GamepadModeNotifierWindow() { IsOpen                            = false };
+        this.consoleWindow             = new ConsoleWindow(configuration) { IsOpen                           = configuration.LogOpenAtStartup };
+        this.pluginStatWindow          = new PluginStatWindow() { IsOpen                                     = false };
+        this.pluginWindow              = new PluginInstallerWindow(pluginImageCache, configuration) { IsOpen = false };
+        this.settingsWindow            = new SettingsWindow() { IsOpen                                       = false };
+        this.selfTestWindow            = new SelfTestWindow(registry) { IsOpen                               = false };
+        this.styleEditorWindow         = new StyleEditorWindow() { IsOpen                                    = false };
         this.titleScreenMenuWindow = new TitleScreenMenuWindow(
             clientState,
             configuration,
