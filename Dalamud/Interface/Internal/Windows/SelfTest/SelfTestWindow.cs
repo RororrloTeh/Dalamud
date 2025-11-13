@@ -13,7 +13,6 @@ using Dalamud.Logging.Internal;
 using Dalamud.Plugin.SelfTest;
 using Dalamud.Plugin.SelfTest.Internal;
 using Dalamud.Utility;
-using Lumina.Excel.Sheets;
 
 namespace Dalamud.Interface.Internal.Windows.SelfTest;
 
@@ -36,12 +35,13 @@ internal class SelfTestWindow : Window
     /// <summary>
     /// Initializes a new instance of the <see cref="SelfTestWindow"/> class.
     /// </summary>
-    public SelfTestWindow(SelfTestRegistry registry)
+    /// <param name="selfTestRegistry">An instance of <see cref="SelfTestRegistry"/>.</param>
+    public SelfTestWindow(SelfTestRegistry selfTestRegistry)
         : base("Dalamud Self-Test", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
     {
-        this.selfTestRegistry = registry;
-        this.Size             = new Vector2(800, 800);
-        this.SizeCondition    = ImGuiCond.FirstUseEver;
+        this.selfTestRegistry = selfTestRegistry;
+        this.Size = new Vector2(800, 800);
+        this.SizeCondition = ImGuiCond.FirstUseEver;
 
         this.RespectCloseHotkey = false;
     }

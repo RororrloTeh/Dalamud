@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -552,7 +553,15 @@ internal class LocalPlugin : IAsyncDisposable
     }
 
     /// <summary>
-    /// 保存此插件清单。
+    /// Checks whether this plugin loads in the given load context.
+    /// </summary>
+    /// <param name="context">The load context to check.</param>
+    /// <returns>Whether this plugin loads in the given load context.</returns>
+    public bool LoadsIn(AssemblyLoadContext context)
+        => this.loader?.LoadContext == context;
+
+    /// <summary>
+    /// Save this plugin manifest.
     /// </summary>
     /// <param name="reason">为什么应该保存。</param>
     protected void SaveManifest(string reason) => this.manifest.Save(this.manifestFile, reason);
