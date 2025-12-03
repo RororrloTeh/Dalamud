@@ -162,7 +162,6 @@ internal class DalamudInterface : IInternalDisposableService
         this.WindowSystem.AddWindow(this.hitchSettingsWindow);
         this.WindowSystem.AddWindow(this.tosWindow);
 
-        this.interfaceManager.ShowAsserts = configuration.ImGuiAssertsEnabledAtStartup ?? false;
         this.isImGuiDrawDevMenu = this.isImGuiDrawDevMenu || configuration.DevBarOpenAtStartup;
 
         this.interfaceManager.Draw += this.OnDraw;
@@ -877,27 +876,7 @@ internal class DalamudInterface : IInternalDisposableService
                     ImGui.MenuItem("显示绘制数据", string.Empty, ref this.isImGuiDrawMetricsWindow);
 
                     ImGui.Separator();
-
-                    var showAsserts = this.interfaceManager.ShowAsserts;
-                    if (ImGui.MenuItem("启用断言弹出窗口"u8, (byte*)null, this.interfaceManager.ShowAsserts))
-                    {
-                        this.interfaceManager.ShowAsserts ^= true;
-                    }
-
-                    if (ImGui.MenuItem("启用断言日志记录 (Verbose)"u8, (byte*)null, this.interfaceManager.EnableVerboseAssertLogging))
-                    {
-                        this.interfaceManager.EnableVerboseAssertLogging ^= true;
-                    }
-
-                    var assertsEnabled = this.configuration.ImGuiAssertsEnabledAtStartup ?? false;
-                    if (ImGui.MenuItem("在游戏开始时启用断言"u8, (byte*)null, assertsEnabled))
-                    {
-                        this.configuration.ImGuiAssertsEnabledAtStartup = !assertsEnabled;
-                        this.configuration.QueueSave();
-                    }
-
-                    ImGui.Separator();
-
+                    
                     if (ImGui.MenuItem("清除窗口焦点"))
                     {
                         ImGui.SetWindowFocus((byte*)null);

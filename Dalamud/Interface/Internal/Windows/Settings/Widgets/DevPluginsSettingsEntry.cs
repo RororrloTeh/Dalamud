@@ -235,8 +235,5 @@ internal sealed class DevPluginsSettingsEntry : SettingsEntry
             this.devPluginLocationsChanged = true;
             this.devPluginTempLocation = string.Empty;
         }
-
-        // Enable ImGui asserts if a dev plugin is added, if no choice was made prior
-        Service<DalamudConfiguration>.Get().ImGuiAssertsEnabledAtStartup ??= true;
     }
 }
