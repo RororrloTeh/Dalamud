@@ -25,9 +25,13 @@ using Dalamud.Interface.Internal;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Support;
+
 using Lumina.Excel.Sheets;
+
 using Serilog;
+
 using TerraFX.Interop.Windows;
+
 using Windows.Win32.System.Memory;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.WindowsAndMessaging;
@@ -71,6 +75,7 @@ public static partial class Util
     private static string? scmVersionInternal;
     private static string? gitHashInternal;
     private static string? gitHashClientStructsInternal;
+    private static string? branchInternal;
 
     private static ulong moduleStartAddr;
     private static ulong moduleEndAddr;
@@ -164,6 +169,35 @@ public static partial class Util
         gitHashClientStructsInternal = attrs.First(a => a.Key == "GitHashClientStructs").Value;
 
         return gitHashClientStructsInternal;
+    }
+
+    /// <summary>
+    /// Gets the Git branch name this version of Dalamud was built from, or null, if this is a Debug build.
+    /// </summary>
+    /// <returns>The branch name.</returns>
+    public static string? GetGitBranch()
+    {
+        if (branchInternal != null)
+            return branchInternal;
+
+        var asm = typeof(Util).Assembly;
+        var attrs = asm.GetCustomAttributes<AssemblyMetadataAttribute>();
+
+        var gitBranch = attrs.FirstOrDefault(a => a.Key == "GitBranch")?.Value;
+        if (gitBranch == null)
+            return null;
+
+        return branchInternal = gitBranch;
+    }
+
+    /// <summary>
+    /// Gets the active Dalamud track, if this instance was launched through XIVLauncher and used a version
+    /// downloaded from webservices.
+    /// </summary>
+    /// <returns>The name of the track, or null.</returns>
+    internal static string? GetActiveTrack()
+    {
+        return Environment.GetEnvironmentVariable("DALAMUD_BRANCH");
     }
 
     /// <inheritdoc cref="DescribeAddress(nint)"/>

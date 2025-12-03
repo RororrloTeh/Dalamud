@@ -185,7 +185,7 @@ internal class DalamudInterface : IInternalDisposableService
                     () => Service<DalamudInterface>.GetNullable()?.ToggleDevMenu(),
                     VirtualKey.SHIFT);
 
-                if (!configuration.DalamudBetaKind.IsNullOrEmpty())
+                if (Util.GetActiveTrack() != "release")
                 {
                     titleScreenMenu.AddEntryCore(
                         Loc.Localize("TSMDalamudDevMenu", "Developer Menu"),
@@ -1075,7 +1075,8 @@ internal class DalamudInterface : IInternalDisposableService
                 {
                     ImGui.PushFont(InterfaceManager.MonoFont);
 
-                    ImGui.BeginMenu(Util.GetScmVersion(), false);
+                    ImGui.BeginMenu($"{Util.GetActiveTrack() ?? "???"} on {Util.GetGitBranch() ?? "???"}", false);
+                    ImGui.BeginMenu($"{Util.GetScmVersion()}", false);
                     ImGui.BeginMenu(this.FrameCount.ToString("000000"), false);
                     ImGui.BeginMenu(ImGui.GetIO().Framerate.ToString("000"), false);
                     ImGui.BeginMenu($"W:{Util.FormatBytes(GC.GetTotalMemory(false))}", false);

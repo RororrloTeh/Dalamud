@@ -55,12 +55,25 @@ internal sealed class DataManager : IInternalDisposableService, IDataManager
                     DefaultExcelLanguage = this.Language.ToLumina(),
                 };
 
-                this.GameData = new(
-                    Path.Combine(Path.GetDirectoryName(Environment.ProcessPath)!, "sqpack"),
-                    luminaOptions)
+                try
                 {
-                    StreamPool = new(),
-                };
+                    this.GameData = new(
+                        Path.Combine(Path.GetDirectoryName(Environment.ProcessPath)!, "sqpack"),
+                        luminaOptions)
+                    {
+                        StreamPool = new(),
+                    };
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Lumina GameData init failed");
+                    Util.Fatal(
+                        "Dalamud could not read required game data files. This likely means your game installation is corrupted or incomplete.\n\n" +
+                        "Please repair your installation by right-clicking the login button in XIVLauncher and choosing \"Repair game files\".",
+                        "Dalamud");
+
+                    return;
+                }
 
                 Log.Information("Lumina is ready: {0}", this.GameData.DataPath);
 
