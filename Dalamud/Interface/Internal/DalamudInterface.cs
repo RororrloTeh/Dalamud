@@ -853,7 +853,7 @@ internal class DalamudInterface : IInternalDisposableService
                     }
 
                     ImGui.MenuItem(this.dalamud.StartInfo.GameVersion?.ToString() ?? "未知版本", false, false);
-                    ImGui.MenuItem($"Dalamud: {Util.GetScmVersion()} CS: {Util.GetGitHashClientStructs()}[{FFXIVClientStructs.ThisAssembly.Git.Commits}]", false, false);
+                    ImGui.MenuItem($"Dalamud: {Util.GetScmVersion()}", false, false);
                     ImGui.MenuItem($"FFXIVClientStructs: {Util.GetGitHashClientStructs()}[{FFXIVClientStructs.ThisAssembly.Git.Commits}]", false, false);
                     ImGui.MenuItem($"运行时: {Environment.Version}", false, false);
 
