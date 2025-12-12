@@ -414,6 +414,30 @@ namespace Dalamud.Injector
             {
                 clientLanguage = ClientLanguage.ChineseSimplified;
             }
+            else if (languageStr[0..(len = Math.Min(languageStr.Length, (key = "简体中文").Length))] == key[0..len])
+            {
+                clientLanguage = ClientLanguage.ChineseSimplified;
+            }
+            else if (languageStr[0..(len = Math.Min(languageStr.Length, (key = "chinesetraditional").Length))] == key[0..len])
+            {
+                clientLanguage = ClientLanguage.ChineseTraditional;
+            }
+            else if (languageStr[0..(len = Math.Min(languageStr.Length, (key = "traditionalchinese").Length))] == key[0..len])
+            {
+                clientLanguage = ClientLanguage.TraditionalChinese;
+            }
+            else if (languageStr[0..(len = Math.Min(languageStr.Length, (key = "繁體中文").Length))] == key[0..len])
+            {
+                clientLanguage = ClientLanguage.TraditionalChinese;
+            }
+            else if (languageStr[0..(len = Math.Min(languageStr.Length, (key = "korean").Length))] == key[0..len])
+            {
+                clientLanguage = ClientLanguage.Korean;
+            }
+            else if (languageStr[0..(len = Math.Min(languageStr.Length, (key = "한국어").Length))] == key[0..len])
+            {
+                clientLanguage = ClientLanguage.Korean;
+            }
             else if (int.TryParse(languageStr, out var languageInt) && Enum.IsDefined((ClientLanguage)languageInt))
             {
                 clientLanguage = (ClientLanguage)languageInt;
@@ -452,7 +476,6 @@ namespace Dalamud.Injector
             startInfo.ConfigurationPath = configurationPath;
             startInfo.PluginDirectory = pluginDirectory;
             startInfo.AssetDirectory = assetDirectory;
-            startInfo.Language = clientLanguage;
             startInfo.Platform = platform;
             startInfo.DelayInitializeMs = delayInitializeMs;
             startInfo.GameVersion = null;

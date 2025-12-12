@@ -54,10 +54,11 @@ public record DalamudStartInfo
     /// </summary>
     public string? AssetDirectory { get; set; }
 
-        /// <summary>
-        /// Gets or sets the language of the game client.
-        /// </summary>
-        public ClientLanguage Language { get; set; } = ClientLanguage.ChineseSimplified;
+    /// <summary>
+    /// Gets or sets the language of the game client.
+    /// </summary>
+    // TODO: 需要更新此处的默认 Excel 语言
+    public ClientLanguage Language => ClientLanguage.ChineseSimplified;
 
     /// <summary>
     /// Gets or sets the underlying platform�Dalamud runs on.
