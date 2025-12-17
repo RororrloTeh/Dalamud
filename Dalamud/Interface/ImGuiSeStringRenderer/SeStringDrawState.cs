@@ -66,17 +66,10 @@ public unsafe ref struct SeStringDrawState : IDisposable
             this.drawList = ssdp.TargetDrawList.Value;
             this.ScreenOffset = ssdp.ScreenOffset ?? Vector2.Zero;
 
-            // API14: Remove, always throw
-            if (ThreadSafety.IsMainThread)
-            {
-                this.ScreenOffset = ssdp.ScreenOffset ?? ImGui.GetCursorScreenPos();
-                this.FontSize = ssdp.FontSize ?? ImGui.GetFontSize();
-            }
-            else
-            {
-                throw new ArgumentException(
-                    $"{nameof(ssdp.FontSize)} must be set when specifying a target draw list, as it cannot be fetched from the ImGui state.");
-            }
+            this.ScreenOffset = ssdp.ScreenOffset ?? throw new ArgumentException(
+                                    $"{nameof(ssdp.ScreenOffset)} must be set when specifying a target draw list, as it cannot be fetched from the ImGui state. (GetCursorScreenPos?)");
+            this.FontSize = ssdp.FontSize ?? throw new ArgumentException(
+                                $"{nameof(ssdp.FontSize)} must be set when specifying a target draw list, as it cannot be fetched from the ImGui state.");
 
             // this.FontSize = ssdp.FontSize ?? throw new ArgumentException(
             //                     $"{nameof(ssdp.FontSize)} must be set when specifying a target draw list, as it cannot be fetched from the ImGui state.");
@@ -90,7 +83,7 @@ public unsafe ref struct SeStringDrawState : IDisposable
         this.splitter = default;
         this.GetEntity = ssdp.GetEntity;
         this.ScreenOffset = new(MathF.Round(this.ScreenOffset.X), MathF.Round(this.ScreenOffset.Y));
-        this.FontSizeScale = this.FontSize / this.Font->FontSize;
+        this.FontSizeScale = this.FontSize / this.Font.FontSize;
         this.LineHeight = MathF.Round(ssdp.EffectiveLineHeight);
         this.LinkUnderlineThickness = ssdp.LinkUnderlineThickness ?? 0f;
         this.Opacity = ssdp.EffectiveOpacity;
@@ -120,7 +113,7 @@ public unsafe ref struct SeStringDrawState : IDisposable
     public Vector2 ScreenOffset { get; }
 
     /// <inheritdoc cref="SeStringDrawParams.Font"/>
-    public ImFont* Font { get; }
+    public ImFontPtr Font { get; }
 
     /// <inheritdoc cref="SeStringDrawParams.FontSize"/>
     public float FontSize { get; }
@@ -273,7 +266,7 @@ public unsafe ref struct SeStringDrawState : IDisposable
     /// <param name="offset">Offset of the glyph in pixels w.r.t. <see cref="ScreenOffset"/>.</param>
     internal void DrawGlyph(scoped in ImGuiHelpers.ImFontGlyphReal g, Vector2 offset)
     {
-        var texId = this.Font->ContainerAtlas->Textures.Ref<ImFontAtlasTexture>(g.TextureIndex).TexID;
+        var texId = this.Font.ContainerAtlas.Textures.Ref<ImFontAtlasTexture>(g.TextureIndex).TexID;
         var xy0 = new Vector2(
             MathF.Round(g.X0 * this.FontSizeScale),
             MathF.Round(g.Y0 * this.FontSizeScale));
@@ -330,7 +323,7 @@ public unsafe ref struct SeStringDrawState : IDisposable
 
         offset += this.ScreenOffset;
         offset.Y += (this.LinkUnderlineThickness - 1) / 2f;
-        offset.Y += MathF.Round(((this.LineHeight - this.FontSize) / 2) + (this.Font->Ascent * this.FontSizeScale));
+        offset.Y += MathF.Round(((this.LineHeight - this.FontSize) / 2) + (this.Font.Ascent * this.FontSizeScale));
 
         this.SetCurrentChannel(SeStringDrawChannel.Foreground);
         this.DrawList.AddLine(
@@ -357,9 +350,9 @@ public unsafe ref struct SeStringDrawState : IDisposable
     internal readonly ref ImGuiHelpers.ImFontGlyphReal FindGlyph(Rune rune)
     {
         var p = rune.Value is >= ushort.MinValue and < ushort.MaxValue
-                    ? this.Font->FindGlyph((ushort)rune.Value)
-                    : this.Font->FallbackGlyph;
-        return ref *(ImGuiHelpers.ImFontGlyphReal*)p;
+                    ? (ImFontGlyphPtr)this.Font.FindGlyph((ushort)rune.Value)
+                    : this.Font.FallbackGlyph;
+        return ref *(ImGuiHelpers.ImFontGlyphReal*)p.Handle;
     }
 
     /// <summary>Gets the glyph corresponding to the given codepoint.</summary>
@@ -392,7 +385,7 @@ public unsafe ref struct SeStringDrawState : IDisposable
             return 0;
 
         return MathF.Round(
-            this.Font->GetDistanceAdjustmentForPair(
+            this.Font.GetDistanceAdjustmentForPair(
                 (ushort)left.Value,
                 (ushort)right.Value) * this.FontSizeScale);
     }

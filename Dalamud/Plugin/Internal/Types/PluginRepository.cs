@@ -70,9 +70,9 @@ internal class PluginRepository
                 },
                 UserAgent =
                 {
-                    new ProductInfoHeaderValue("Dalamud", Util.AssemblyVersion)
-                }
-            }
+                    new ProductInfoHeaderValue("Dalamud", Versioning.GetAssemblyVersion()),
+                },
+            },
         };
 
         this.httpClient.DefaultRequestHeaders.Add("X-Machine-Token", DeviceUtils.GetDeviceId());
@@ -185,6 +185,13 @@ internal class PluginRepository
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
         if (manifest.AssemblyVersion == null)
         {
+            Log.Error("仓库 {RepoLink} 中的插件 {PluginName} 缺少有效的版本", PluginMasterUrl, manifest.InternalName);
+            return false;
+        }
+
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+        if (manifest.AssemblyVersion == null)
+        {
             Log.Error("仓库 {RepoLink} 中的插件 {PluginName} 缺少有效的程序集版本", PluginMasterUrl,
                       manifest.InternalName);
             return false;
@@ -210,6 +217,6 @@ internal class PluginRepository
 
         using var requestCts = new CancellationTokenSource(TimeSpan.FromSeconds(timeout));
 
-        return await client.SendAsync(request, requestCts.Token);
+        return await httpClient.SendAsync(request, requestCts.Token);
     }
 }

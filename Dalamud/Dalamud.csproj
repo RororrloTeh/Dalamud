@@ -6,7 +6,7 @@
 
     <PropertyGroup Label="Feature">
         <Description>XIV Launcher addon framework</Description>
-        <DalamudVersion>13.0.0.16</DalamudVersion>
+        <DalamudVersion>14.0.0.0</DalamudVersion>
         <AssemblyVersion>$(DalamudVersion)</AssemblyVersion>
         <Version>$(DalamudVersion)</Version>
         <FileVersion>$(DalamudVersion)</FileVersion>
@@ -73,23 +73,19 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="MinSharp" />
-        <PackageReference Include="SharpDX.Direct3D11" />
-        <PackageReference Include="SharpDX.Mathematics" />
         <PackageReference Include="Newtonsoft.Json" />
         <PackageReference Include="Serilog" />
         <PackageReference Include="Serilog.Sinks.Async" />
         <PackageReference Include="Serilog.Sinks.Console" />
         <PackageReference Include="Serilog.Sinks.File" />
         <PackageReference Include="sqlite-net-pcl" />
+        <PackageReference Include="StreamJsonRpc" />
         <PackageReference Include="StyleCop.Analyzers">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="System.Collections.Immutable" />
-        <PackageReference Include="System.Drawing.Common"  />
         <PackageReference Include="System.Reactive" />
         <PackageReference Include="System.Reflection.MetadataLoadContext" />
-        <PackageReference Include="System.Resources.Extensions" />
         <PackageReference Include="TerraFX.Interop.Windows" />
     </ItemGroup>
     <ItemGroup>
@@ -116,10 +112,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="licenses.txt" />
-        <Content Include="licenses.txt">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
+      <None Remove="licenses.txt" />
+      <Content Include="licenses.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Interface\ImGuiBackend\Renderers\gaussian.hlsl" />
+      <None Remove="Interface\ImGuiBackend\Renderers\fullscreen-quad.hlsl.bytes" />
     </ItemGroup>
 
     <ItemGroup>
@@ -223,10 +221,5 @@
         </ItemGroup>
         <!-- writes the attribute to the customAssemblyInfo file -->
         <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)" AssemblyAttributes="@(AssemblyAttributes)" />
-    </Target>
-
-    <!-- Copy plugin .targets folder into distrib -->
-    <Target Name="CopyPluginTargets" AfterTargets="Build">
-        <Copy SourceFiles="$(ProjectDir)\..\targets\Dalamud.Plugin.targets;$(ProjectDir)\..\targets\Dalamud.Plugin.Bootstrap.targets" DestinationFolder="$(OutDir)\targets" />
     </Target>
 </Project>

@@ -315,7 +315,7 @@ internal class LocalPlugin : IAsyncDisposable
             if (!this.CheckPolicy())
                 throw new PluginPreconditionFailedException($"由于加载策略禁止，无法加载 {this.Name}");
 
-            if (this.Manifest.MinimumDalamudVersion != null && this.Manifest.MinimumDalamudVersion > Util.AssemblyVersionParsed)
+            if (this.Manifest.MinimumDalamudVersion != null && this.Manifest.MinimumDalamudVersion > Versioning.GetAssemblyVersionParsed())
                 throw new PluginPreconditionFailedException($"Unable to load {this.Name}, Dalamud version is lower than minimum required version {this.Manifest.MinimumDalamudVersion}");
 
             this.State = PluginState.Loading;

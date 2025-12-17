@@ -862,8 +862,8 @@ internal class DalamudInterface : IInternalDisposableService
                     }
 
                     ImGui.MenuItem(this.dalamud.StartInfo.GameVersion?.ToString() ?? "未知版本", false, false);
-                    ImGui.MenuItem($"Dalamud: {Util.GetScmVersion()}", false, false);
-                    ImGui.MenuItem($"FFXIVClientStructs: {Util.GetGitHashClientStructs()}[{FFXIVClientStructs.ThisAssembly.Git.Commits}]", false, false);
+                    ImGui.MenuItem($"Dalamud: {Versioning.GetScmVersion()}", false, false);
+                    ImGui.MenuItem($"FFXIVClientStructs: {Versioning.GetGitHashClientStructs()}[{FFXIVClientStructs.ThisAssembly.Git.Commits}]", false, false);
                     ImGui.MenuItem($"运行时: {Environment.Version}", false, false);
 
                     ImGui.EndMenu();
@@ -1055,8 +1055,8 @@ internal class DalamudInterface : IInternalDisposableService
                 {
                     ImGui.PushFont(InterfaceManager.MonoFont);
 
-                    ImGui.BeginMenu($"分支: {Util.GetGitBranch() ?? "???"}", false);
-                    ImGui.BeginMenu($"版本: {Util.GetScmVersion()}", false);
+                    ImGui.BeginMenu($"分支: {Versioning.GetGitBranch() ?? "???"}", false);
+                    ImGui.BeginMenu($"版本: {Versioning.GetScmVersion()}", false);
                     ImGui.BeginMenu(this.FrameCount.ToString("000000"), false);
                     ImGui.BeginMenu(ImGui.GetIO().Framerate.ToString("000"), false);
                     ImGui.BeginMenu($"内存:{Util.FormatBytes(GC.GetTotalMemory(false))}", false);
