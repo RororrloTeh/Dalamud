@@ -182,9 +182,6 @@ public class DalamudBuild : NukeBuild
         {
             DotNetTasks.DotNetBuild(s => s
                 .SetProjectFile(InjectorProjectFile)
-#if DEBUG
-                .SetProcessToolPath(Environment.GetEnvironmentVariable("MSBuild"))
-#endif
                 .SetConfiguration(Configuration)
                 .EnableNoRestore());
         });
