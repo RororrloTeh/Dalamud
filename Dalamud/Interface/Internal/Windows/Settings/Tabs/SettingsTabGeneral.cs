@@ -4,6 +4,7 @@ using CheapLoc;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Configuration.Internal;
 using Dalamud.Game.Text;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Internal.Windows.Settings.Widgets;
 using Dalamud.Interface.Utility;
 using Dalamud.Plugin.Internal;
@@ -112,27 +113,29 @@ internal sealed class SettingsTabGeneral : SettingsTab
             
             _ = Service<PluginManager>.Get().SetPluginReposFromConfigAsync(true);
         }
-        
-        ImGui.AlignTextToFramePadding();
-        ImGui.Text("自定义:");
-        
-        ImGui.SameLine();
-        ImGui.SetNextItemWidth(500f * ImGuiHelpers.GlobalScale);
-        ImGui.InputText("###CustomMainRepo", ref mainRepoUrl, 1024);
-        
-        if (ImGui.IsItemDeactivatedAfterEdit())
+
+        if (ImGui.CollapsingHeader("启用自定义主库链接"))
         {
-            if (string.IsNullOrWhiteSpace(mainRepoUrl))
-                mainRepoUrl = PluginRepository.MainRepoUrlSoli;
+            ImGui.AlignTextToFramePadding();
+            ImGui.TextColored(ImGuiColors.DalamudRed, "警告：第三方插件仓库不应该在此设置");
+            ImGui.TextColored(ImGuiColors.DalamudOrange, "如果你不知道什么是主库链接，那你就不应该修改下面输入框的内容");
+            ImGui.Text("自定义:");
             
-            config.MainRepoUrl = mainRepoUrl;
-            config.QueueSave();
+            ImGui.SameLine();
+            ImGui.SetNextItemWidth(500f * ImGuiHelpers.GlobalScale);
+            ImGui.InputText("###CustomMainRepo", ref mainRepoUrl, 1024);
             
-            _ = Service<PluginManager>.Get().SetPluginReposFromConfigAsync(true);
+            if (ImGui.IsItemDeactivatedAfterEdit())
+            {
+                if (string.IsNullOrWhiteSpace(mainRepoUrl))
+                    mainRepoUrl = PluginRepository.MainRepoUrlSoli;
+                
+                config.MainRepoUrl = mainRepoUrl;
+                config.QueueSave();
+                
+                _ = Service<PluginManager>.Get().SetPluginReposFromConfigAsync(true);
+            }
         }
-        
-        ImGui.TextDisabled("选择 Dalamud 默认将会加载的主库, 你也可以选择自定义主库 (请注意 API 版本)");
-        ImGui.TextDisabled("切换主库后你将需要卸载并重新安装上一个主库的插件，这是预期行为");
         
         ImGuiHelpers.ScaledDummy(20);
 

@@ -1333,16 +1333,7 @@ internal class PluginInstallerWindow : Window, IDisposable
         }
 
         // Filter out plugins that are not hidden
-        proxies = proxies.Where(IsProxyHidden)
-                         .OrderBy(x =>
-                         {
-                             if (x.LocalPlugin != null)
-                                 return x.LocalPlugin.Manifest.InstalledFromUrl;
-                             if (x.RemoteManifest != null)
-                                 return x.RemoteManifest.SourceRepo.PluginMasterUrl;
-                             return string.Empty;
-                         })
-                         .ToList();
+        proxies = proxies.Where(IsProxyHidden).ToList();
 
         return proxies;
     }
@@ -1373,13 +1364,13 @@ internal class PluginInstallerWindow : Window, IDisposable
         
         // 按仓库 URL 对插件分组
         var proxyGroups = proxies
-            .GroupBy(p => {
+            .GroupBy(p =>
+            {
                 if (p.LocalPlugin is { IsDev: false })
-                    return p.LocalPlugin.Manifest.InstalledFromUrl;
-                else if (p.RemoteManifest != null)
-                    return p.RemoteManifest.SourceRepo.PluginMasterUrl;
-                else
-                    return "开发版插件";
+                    return p.LocalPlugin.Manifest.InstalledFromUrl == SpecialPluginSource.MainRepo ? "主库" : p.LocalPlugin.Manifest.InstalledFromUrl;
+                if (p.RemoteManifest != null)
+                    return p.RemoteManifest.SourceRepo.IsThirdParty ? p.RemoteManifest.SourceRepo.PluginMasterUrl : "主库";
+                return "开发版插件";
             })
             .OrderBy(g => g.Key)
             .ToList();
@@ -1550,19 +1541,26 @@ internal class PluginInstallerWindow : Window, IDisposable
 
                 // Find the applicable remote manifest
                 remoteManifest = this.pluginListAvailable
-                                         .FirstOrDefault(rm => rm.InternalName == plugin.Manifest.InternalName &&
-                                                               rm.RepoUrl == plugin.Manifest.RepoUrl);
+                                         .FirstOrDefault(rm =>
+                                         {
+                                             var installFrom = plugin.Manifest.InstalledFromUrl;
+                                             if (installFrom == SpecialPluginSource.MainRepo)
+                                                 installFrom = Service<DalamudConfiguration>.Get().MainRepoUrl;
+                                             return rm.InternalName == plugin.Manifest.InternalName &&
+                                                    rm.SourceRepo.PluginMasterUrl.Equals(installFrom);
+                                         });
             }
             else if (!plugin.IsDev)
             {
                 continue;
             }
-            
-            if (!plugin.IsDev && remoteManifest != null && lastRepoUrl != remoteManifest.SourceRepo.PluginMasterUrl)
-            {
-                lastRepoUrl = remoteManifest.SourceRepo.PluginMasterUrl;
 
-                if (ImGui.Button($"{lastRepoUrl}",
+            var currentRepoUrl = remoteManifest?.SourceRepo.PluginMasterUrl ?? plugin.Manifest.InstalledFromUrl;
+            if (!plugin.IsDev && lastRepoUrl != currentRepoUrl)
+            {
+                lastRepoUrl = currentRepoUrl;
+                var repoText = lastRepoUrl == Service<DalamudConfiguration>.Get().MainRepoUrl ? "主库" : lastRepoUrl;
+                if (ImGui.Button($"{repoText}",
                                  new(ImGui.GetContentRegionAvail().X, 40f + ImGui.GetTextLineHeightWithSpacing())))
                     ImGui.SetClipboardText(lastRepoUrl);
             }

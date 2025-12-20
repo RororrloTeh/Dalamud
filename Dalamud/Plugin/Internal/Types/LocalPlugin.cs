@@ -101,6 +101,14 @@ internal class LocalPlugin : IAsyncDisposable
 
             needsSaveDueToLegacyFiles = true;
         }
+        
+        // 迁移旧的 `预装库`，保留一段时间待大部分用户迁移完成可删除
+        if (this.manifest.InstalledFromUrl is PluginRepository.MainRepoUrlSoli or PluginRepository.MainRepoUrlGoatCorp)
+        {
+            this.manifest.InstalledFromUrl = SpecialPluginSource.MainRepo;
+            
+            needsSaveDueToLegacyFiles = true;
+        }
 
         var pluginManager = Service<PluginManager>.Get();
         this.IsBanned = pluginManager.IsManifestBanned(this.manifest); // && !this.IsDev;

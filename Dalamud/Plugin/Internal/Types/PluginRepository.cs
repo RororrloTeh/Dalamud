@@ -75,6 +75,7 @@ internal class PluginRepository
 
         this.httpClient.DefaultRequestHeaders.Add("X-Machine-Token", DeviceUtils.GetDeviceId());
         PluginMasterUrl = pluginMasterUrl;
+        IsThirdParty = pluginMasterUrl != Service<DalamudConfiguration>.Get().MainRepoUrl;
         IsEnabled       = isEnabled;
     }
 
@@ -86,7 +87,7 @@ internal class PluginRepository
     /// <summary>
     ///     是否为第三方仓库
     /// </summary>
-    public bool IsThirdParty => true;
+    public bool IsThirdParty { get; }
 
     /// <summary>
     ///     仓库是否启用
