@@ -1513,7 +1513,9 @@ internal class PluginManager : IInternalDisposableService
             }
 
             // Document the url the plugin was installed from
-            tempManifest.InstalledFromUrl = repoManifest.SourceRepo.PluginMasterUrl;
+            tempManifest.InstalledFromUrl = repoManifest.SourceRepo.IsThirdParty
+                                                ? repoManifest.SourceRepo.PluginMasterUrl
+                                                : SpecialPluginSource.MainRepo;
 
             tempManifest.Save(tempManifestFile, "installation");
 
