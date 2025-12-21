@@ -26,8 +26,6 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 using Lumina.Text.ReadOnly;
 using Serilog;
 
-using LSeStringBuilder = Lumina.Text.SeStringBuilder;
-
 namespace Dalamud.Interface.Internal.Windows;
 
 /// <summary>
@@ -498,20 +496,23 @@ internal class TitleScreenMenuWindow : Window, IDisposable
             return;
         this.lastLoadedPluginCount = count;
 
-        var lssb = LSeStringBuilder.SharedPool.Get();
-        lssb.Append(new ReadOnlySeStringSpan(addon->AtkValues[1].String.Value)).Append("\n\n");
-        lssb.PushEdgeColorType(701).PushColorType(539)
-            .Append(SeIconChar.BoxedLetterD.ToIconChar())
-            .PopColorType().PopEdgeColorType();
-        lssb.Append($" Dalamud: {Versioning.GetScmVersion()}");
+        using var rssb = new RentedSeStringBuilder();
 
-        lssb.Append($" - 已加载 {count} 个插件");
+        rssb.Builder
+            .Append(new ReadOnlySeStringSpan(addon->AtkValues[1].String.Value))
+            .Append("\n\n")
+            .PushEdgeColorType(701)
+            .PushColorType(539)
+            .Append(SeIconChar.BoxedLetterD.ToIconChar())
+            .PopColorType()
+            .PopEdgeColorType()
+            .Append($" Dalamud: {Versioning.GetScmVersion()}")
+            .Append($" - 已加载 {count} 个插件");
 
         if (pm?.SafeMode is true)
-            lssb.PushColorType(17).Append(" [安全模式]").PopColorType();
+            rssb.Builder.PushColorType(17).Append(" [安全模式]").PopColorType();
 
-        textNode->SetText(lssb.GetViewAsSpan());
-        LSeStringBuilder.SharedPool.Return(lssb);
+        textNode->SetText(rssb.Builder.GetViewAsSpan());
     }
 
     private void TitleScreenMenuEntryListChange() => this.privateAtlas.BuildFontsAsync();
