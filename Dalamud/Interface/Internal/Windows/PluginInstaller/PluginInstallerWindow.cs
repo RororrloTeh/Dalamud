@@ -1295,9 +1295,16 @@ internal class PluginInstallerWindow : Window, IDisposable
         foreach (var availableManifest in this.categoryManager.GetCurrentCategoryContent(filteredAvailableManifests).Cast<RemotePluginManifest>())
         {
             var plugin = this.pluginListInstalled
-                             .FirstOrDefault(plugin => plugin.Manifest.InternalName == availableManifest.InternalName &&
-                                                       plugin.Manifest.RepoUrl == availableManifest.RepoUrl &&
-                                                       !plugin.IsDev);
+                             .FirstOrDefault(plugin =>
+                             {
+                                 var installFrom = plugin.Manifest.InstalledFromUrl;
+                                 if (installFrom == SpecialPluginSource.MainRepo)
+                                     installFrom = Service<DalamudConfiguration>.Get().MainRepoUrl;
+         
+                                 return plugin.Manifest.InternalName == availableManifest.InternalName &&
+                                        availableManifest.SourceRepo.PluginMasterUrl.Equals(installFrom) &&
+                                        !plugin.IsDev;
+                             });
 
             // We "consumed" this plugin from the pile and remove it.
             if (plugin != null)
