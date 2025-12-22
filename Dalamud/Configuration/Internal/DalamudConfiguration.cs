@@ -124,12 +124,7 @@ internal sealed class DalamudConfiguration : IInternalDisposableService
     /// <summary>
     /// Gets or sets a list of custom repos.
     /// </summary>
-    public List<ThirdPartyRepoSettings> ThirdRepoList { get; set; } = new();
-
-    /// <summary>
-    /// Gets or sets a value indicating whether a disclaimer regarding third-party repos has been dismissed.
-    /// </summary>
-    public bool? ThirdRepoSpeedbumpDismissed { get; set; } = null;
+    public List<ThirdPartyRepoSettings> ThirdRepoList { get; set; } = [];
 
     /// <summary>
     /// Gets or sets a list of hidden plugins.
@@ -334,26 +329,6 @@ internal sealed class DalamudConfiguration : IInternalDisposableService
     /// Gets or sets a value indicating whether the user has seen the profiles tutorial.
     /// </summary>
     public bool ProfilesHasSeenTutorial { get; set; } = false;
-
-    /// <summary>
-    /// Gets or sets a value whether or not Dalamud use manual proxy settings.
-    /// </summary>
-    public bool UseManualProxy { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value what type proxy Dalamud will use.
-    /// </summary>
-    public string ProxyProtocol { get; set; } = "socks5";
-
-    /// <summary>
-    /// Gets or sets the proxy host address.
-    /// </summary>
-    public string ProxyHost { get; set; } = "127.0.0.1";
-
-    /// <summary>
-    /// Gets or sets the proxy port.
-    /// </summary>
-    public int ProxyPort { get; set; } = 1080;
     
     /// <summary>
     /// Gets or sets the default UI preset.
@@ -572,10 +547,6 @@ internal sealed class DalamudConfiguration : IInternalDisposableService
 
         deserialized ??= new DalamudConfiguration();
         deserialized.configPath = path;
-
-        var splitedValue = deserialized.ProxyHost.Split("://");
-        if (splitedValue.Length >= 2)
-            deserialized.ProxyHost = splitedValue[1];
             
         try
         {

@@ -1,16 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 
 using CheapLoc;
-
-using Dalamud.Bindings.ImGui;
 using Dalamud.Configuration.Internal;
-using Dalamud.Interface.Colors;
 using Dalamud.Interface.Internal.ReShadeHandling;
 using Dalamud.Interface.Internal.Windows.Settings.Widgets;
-using Dalamud.Interface.Utility;
-using Dalamud.Plugin.Internal;
-using Dalamud.Utility;
-using Dalamud.Utility.Internal;
 
 namespace Dalamud.Interface.Internal.Windows.Settings.Tabs;
 
@@ -26,40 +19,6 @@ internal sealed class SettingsTabExperimental : SettingsTab
 
     public override SettingsEntry[] Entries { get; } =
     [
-        new SettingsEntry<bool>(
-            LazyLoc.Localize("DalamudSettingsPluginTest", "Get plugin testing builds"),
-            LazyLoc.Localize("DalamudSettingsPluginTestHint", "Receive testing prereleases for selected plugins.\nTo opt-in to testing builds for a plugin, you have to right click it in the \"Installed Plugins\" tab of the plugin installer and select \"Receive plugin testing versions\"."),
-            c => c.DoPluginTest,
-            (v, c) => c.DoPluginTest = v),
-        new HintSettingsEntry(
-            LazyLoc.Localize("DalamudSettingsPluginTestWarning", "Testing plugins may contain bugs or crash your game. Please only enable this if you are aware of the risks."),
-            ImGuiColors.DalamudRed),
-
-        new GapSettingsEntry(5),
-
-        new ButtonSettingsEntry(
-            LazyLoc.Localize("DalamudSettingsClearHidden", "Clear hidden plugins"),
-            LazyLoc.Localize("DalamudSettingsClearHiddenHint", "Restore plugins you have previously hidden from the plugin installer."),
-            () =>
-            {
-                Service<DalamudConfiguration>.Get().HiddenPluginInternalName.Clear();
-                Service<PluginManager>.Get().RefilterPluginMasters();
-            }),
-
-        new GapSettingsEntry(5, true),
-
-        new ProxySettingsEntry(),
-
-        new GapSettingsEntry(5),
-
-        new DevPluginsSettingsEntry(),
-
-        new GapSettingsEntry(5, true),
-
-        new ThirdRepoSettingsEntry(),
-
-        new GapSettingsEntry(5, true),
-
         new EnumSettingsEntry<ReShadeHandlingMode>(
             Loc.Localize("DalamudSettingsReShadeHandlingMode", "ReShade 处理模式"),
             Loc.Localize(
@@ -123,14 +82,4 @@ internal sealed class SettingsTabExperimental : SettingsTab
             (v, c) => c.ProfilesEnabled = v),
             */
     ];
-
-    public override void Draw()
-    {
-        base.Draw();
-
-        ImGui.TextColoredWrapped(
-            ImGuiColors.DalamudGrey,
-            "Total memory used by Dalamud & Plugins: " + Util.FormatBytes(GC.GetTotalMemory(false)));
-        ImGuiHelpers.ScaledDummy(15);
-    }
 }

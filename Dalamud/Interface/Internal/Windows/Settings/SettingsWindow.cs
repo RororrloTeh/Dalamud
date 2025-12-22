@@ -44,7 +44,7 @@ internal sealed class SettingsWindow : Window
         [
             new SettingsTabGeneral(),
             new SettingsTabLook(),
-            new SettingsTabAutoUpdates(),
+            new SettingsTabPlugin(), // REGION TODO: 国服修改
             new SettingsTabDtr(),
             new SettingsTabBadge(),
             new SettingsTabExperimental(),
@@ -151,12 +151,35 @@ internal sealed class SettingsWindow : Window
     /// <inheritdoc/>
     public override void Draw()
     {
+        using (ImRaii.Disabled(this.tabs.Any(x => x.Entries.Any(y => !y.IsValid)))) 
+        {
+            using (ImRaii.PushStyle(ImGuiStyleVar.FrameRounding, 100f))
+            {
+                using var font = ImRaii.PushFont(InterfaceManager.IconFont);
+                if (ImGui.Button(FontAwesomeIcon.Save.ToIconString(), new Vector2(-1, ImGui.GetTextLineHeightWithSpacing() * 1.5f)))
+                {
+                    this.Save();
+
+                    if (!ImGui.IsKeyDown(ImGuiKey.ModShift))
+                        this.IsOpen = false;
+                }
+            }
+
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.SetTooltip(!ImGui.IsKeyDown(ImGuiKey.ModShift)
+                                     ? Loc.Localize("DalamudSettingsSaveAndExit", "Save changes and close")
+                                     : Loc.Localize("DalamudSettingsSave",        "Save changes"));
+            }
+        }
+        
+        ImGui.Spacing();
+        
         ImGui.SetNextItemWidth(-1);
         using (ImRaii.Disabled(this.CurrentlyOpenTab is SettingsTabAbout))
             ImGui.InputTextWithHint("###searchInput"u8, "搜索设置项...", ref this.searchInput, 100, ImGuiInputTextFlags.AutoSelectAll);
+        
         ImGui.Spacing();
-
-        var windowSize = ImGui.GetWindowSize();
 
         using (var tabBar = ImRaii.TabBar("###settingsTabs"u8))
         {
@@ -166,36 +189,6 @@ internal sealed class SettingsWindow : Window
                     this.DrawTabs();
                 else
                     this.DrawSearchResults();
-            }
-        }
-
-        ImGui.SetCursorPos(windowSize - ImGuiHelpers.ScaledVector2(70));
-
-        using (var buttonChild = ImRaii.Child("###settingsFinishButton"u8))
-        {
-            if (buttonChild)
-            {
-                using var disabled = ImRaii.Disabled(this.tabs.Any(x => x.Entries.Any(y => !y.IsValid)));
-
-                using (ImRaii.PushStyle(ImGuiStyleVar.FrameRounding, 100f))
-                {
-                    using var font = ImRaii.PushFont(InterfaceManager.IconFont);
-
-                    if (ImGui.Button(FontAwesomeIcon.Save.ToIconString(), new Vector2(40)))
-                    {
-                        this.Save();
-
-                        if (!ImGui.IsKeyDown(ImGuiKey.ModShift))
-                            this.IsOpen = false;
-                    }
-                }
-
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.SetTooltip(!ImGui.IsKeyDown(ImGuiKey.ModShift)
-                                         ? Loc.Localize("DalamudSettingsSaveAndExit", "Save changes and close")
-                                         : Loc.Localize("DalamudSettingsSave", "Save changes"));
-                }
             }
         }
     }
