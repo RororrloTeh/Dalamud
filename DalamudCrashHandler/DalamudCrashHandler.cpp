@@ -1037,18 +1037,19 @@ int main() {
         config.dwFlags = TDF_ENABLE_HYPERLINKS | TDF_CAN_BE_MINIMIZED | TDF_ALLOW_DIALOG_CANCELLATION | TDF_USE_COMMAND_LINKS | TDF_NO_DEFAULT_RADIO_BUTTON;
         config.pszMainIcon = MAKEINTRESOURCE(IDI_ICON1);
         config.pszMainInstruction = L"游戏崩溃";
-        config.pszContent = L""
+        std::wstring content =
             L"相关原因可能为: 插件故障、模组损坏、其他第三方工具、游戏本身问题等\n"
             L"\n"
             L"请暂时禁用你不需要的插件, 并使用 XIVLauncher 检测游戏文件完整性\n"
             L"\n"
-            L"如果你想在我们的 <a href=\"discord\">Discord</a> 中寻求帮助，请保存 <a href=\"exporttspack\">报错信息文件 (点击此处)</a> 并发送给我们\n";
+            L"如果你想在我们的 <a href=\"discord\">Discord</a> 中寻求帮助，请保存 <a href=\"exporttspack\">报错信息文件 (点击此处)</a> 并发送给我们\n"
+            L"\n"
+            L"堆栈跟踪:\n";
+        content += window_log_str;
+        config.pszContent = content.c_str();
         config.pButtons = buttons;
         config.cButtons = ARRAYSIZE(buttons);
         config.nDefaultButton = IdButtonRestart;
-        config.pszExpandedControlText = L"隐藏堆栈跟踪";
-        config.pszCollapsedControlText = L"显示堆栈跟踪";
-        config.pszExpandedInformation = window_log_str.c_str();
         config.pszWindowTitle = L"故障处理器";
         config.pRadioButtons = radios;
         config.cRadioButtons = ARRAYSIZE(radios);
