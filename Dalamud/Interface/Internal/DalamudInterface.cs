@@ -60,7 +60,6 @@ internal class DalamudInterface : IInternalDisposableService
     private readonly DalamudConfiguration configuration;
     private readonly InterfaceManager interfaceManager;
 
-    private readonly ChangelogWindow changelogWindow;
     private readonly ColorDemoWindow colorDemoWindow;
     private readonly ComponentDemoWindow componentDemoWindow;
     private readonly DataWindow dataWindow;
@@ -137,18 +136,11 @@ internal class DalamudInterface : IInternalDisposableService
             titleScreenMenu,
             consoleManager,
             addonLifecycle) { IsOpen = false };
-        this.changelogWindow = new ChangelogWindow(
-            this.titleScreenMenuWindow,
-            fontAtlasFactory,
-            dalamudAssetManager,
-            gameGui,
-            framework) { IsOpen = false };
         this.profilerWindow = new ProfilerWindow() { IsOpen = false };
         this.branchSwitcherWindow = new BranchSwitcherWindow() { IsOpen = false };
         this.hitchSettingsWindow = new HitchSettingsWindow() { IsOpen = false };
         this.tosWindow = new ToSWindow() { IsOpen = false };
 
-        this.WindowSystem.AddWindow(this.changelogWindow);
         this.WindowSystem.AddWindow(this.colorDemoWindow);
         this.WindowSystem.AddWindow(this.componentDemoWindow);
         this.WindowSystem.AddWindow(this.dataWindow);
@@ -252,7 +244,6 @@ internal class DalamudInterface : IInternalDisposableService
         this.WindowSystem.Windows.OfType<IDisposable>().AggregateToDisposable().Dispose();
         this.WindowSystem.RemoveAllWindows();
 
-        this.changelogWindow.Dispose();
         this.consoleWindow.Dispose();
         this.pluginWindow.Dispose();
         this.titleScreenMenuWindow.Dispose();
@@ -260,11 +251,6 @@ internal class DalamudInterface : IInternalDisposableService
     }
 
     #region Open
-
-    /// <summary>
-    /// Opens the <see cref="ChangelogWindow"/>.
-    /// </summary>
-    public void OpenChangelogWindow() => this.changelogWindow.IsOpen = true;
 
     /// <summary>
     /// Opens the <see cref="ColorDemoWindow"/>.
@@ -423,11 +409,6 @@ internal class DalamudInterface : IInternalDisposableService
     #endregion
 
     #region Toggle
-
-    /// <summary>
-    /// Toggles the <see cref="ChangelogWindow"/>.
-    /// </summary>
-    public void ToggleChangelogWindow() => this.changelogWindow.Toggle();
 
     /// <summary>
     /// Toggles the <see cref="ColorDemoWindow"/>.
@@ -813,11 +794,6 @@ internal class DalamudInterface : IInternalDisposableService
                     if (ImGui.MenuItem("设置"))
                     {
                         this.OpenSettings();
-                    }
-
-                    if (ImGui.MenuItem("更新日志"))
-                    {
-                        this.OpenChangelogWindow();
                     }
 
                     if (ImGui.MenuItem("预设 ImGui 组件"))

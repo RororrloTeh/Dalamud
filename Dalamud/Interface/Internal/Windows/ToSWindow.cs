@@ -8,9 +8,6 @@ namespace Dalamud.Interface.Internal.Windows;
 /// </summary>
 internal sealed class ToSWindow : Window, IDisposable
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ChangelogWindow"/> class.
-    /// </summary>
     public ToSWindow()
         : base("Dalamud 用户协议", ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoCollapse)
     {
