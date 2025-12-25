@@ -21,7 +21,7 @@ namespace Dalamud.Plugin.Internal.Types;
 internal class PluginRepository
 {
     public const string MainRepoUrlGoatCorp = "https://kamori.goats.dev/Plugin/PluginMaster";
-    public const string MainRepoUrlSoil     = "https://raw.githubusercontent.com/Dalamud-DailyRoutines/PluginDistD17/pluginmaster.json";
+    public const string MainRepoUrlSoil     = "https://gh.atmoomen.top/raw.githubusercontent.com/Dalamud-DailyRoutines/PluginDistD17/main/pluginmaster.json";
 
     // 非法主库地址
     private static readonly List<string> InvalidMainRepos =
