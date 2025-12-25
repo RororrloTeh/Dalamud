@@ -133,8 +133,6 @@ internal class PluginRepository
 
         try
         {
-            Log.Information($"开始获取仓库数据：{this.PluginMasterUrl}");
-
             using var response = await this.GetPluginMaster(this.PluginMasterUrl);
 
             response.EnsureSuccessStatusCode();
@@ -157,7 +155,6 @@ internal class PluginRepository
                 foreach (var manifest in this.PluginMaster) { manifest.IsHide = false; }
             }
 
-            Log.Information($"仓库数据获取成功：{this.PluginMasterUrl}");
             this.State = PluginRepositoryState.Success;
         }
         catch (Exception ex)
