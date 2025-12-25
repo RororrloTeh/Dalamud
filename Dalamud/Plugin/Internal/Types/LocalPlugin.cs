@@ -103,7 +103,7 @@ internal class LocalPlugin : IAsyncDisposable
         }
         
         // 迁移旧的 `预装库`，保留一段时间待大部分用户迁移完成可删除
-        if (this.manifest.InstalledFromUrl is PluginRepository.MainRepoUrlSoli or PluginRepository.MainRepoUrlGoatCorp)
+        if (this.manifest.InstalledFromUrl is PluginRepository.MainRepoUrlSoil or PluginRepository.MainRepoUrlGoatCorp)
         {
             this.manifest.InstalledFromUrl = SpecialPluginSource.MainRepo;
             

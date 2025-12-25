@@ -20,20 +20,16 @@ namespace Dalamud.Plugin.Internal.Types;
 /// </summary>
 internal class PluginRepository
 {
-    /// <summary>
-    ///     官方主仓库地址
-    /// </summary>
     public const string MainRepoUrlGoatCorp = "https://kamori.goats.dev/Plugin/PluginMaster";
-    
-    public const string MainRepoUrlSoli = "https://raw.githubusercontent.com/Dalamud-DailyRoutines/PluginDistD17/refs/heads/main/pluginmaster.json";
+    public const string MainRepoUrlSoil     = "https://raw.githubusercontent.com/Dalamud-DailyRoutines/PluginDistD17/pluginmaster.json";
 
-    public const string AtmoOmenRepoUrl = "https://raw.githubusercontent.com/AtmoOmen/DalamudPlugins/main/pluginmaster.json";
-
-    private static readonly List<string> InvalidRepos =
+    // 非法主库地址
+    private static readonly List<string> InvalidMainRepos =
     [
         "https://aonyx.ffxiv.wang/Plugin/PluginMaster",
-        "https://gh.atmoomen.top/https://raw.githubusercontent.com/Dalamud-DailyRoutines/PluginDistD17/main/pluginmaster.json"
     ];
+    
+    public const string AtmoOmenRepoUrl = "https://raw.githubusercontent.com/AtmoOmen/DalamudPlugins/main/pluginmaster.json";
     
     private const int HttpRequestTimeoutSeconds = 20;
 
@@ -113,9 +109,9 @@ internal class PluginRepository
     {
         // 摊手.jpg
         var dalamudConfig = Service<DalamudConfiguration>.Get();
-        if (InvalidRepos.Any(x => dalamudConfig.MainRepoUrl.Contains(x, StringComparison.OrdinalIgnoreCase)))
+        if (InvalidMainRepos.Any(x => dalamudConfig.MainRepoUrl.Contains(x, StringComparison.OrdinalIgnoreCase)))
         {
-            dalamudConfig.MainRepoUrl = MainRepoUrlSoli;
+            dalamudConfig.MainRepoUrl = MainRepoUrlSoil;
             dalamudConfig.QueueSave();
         }
 

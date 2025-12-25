@@ -69,7 +69,7 @@ internal sealed class DalamudConfiguration : IInternalDisposableService
     /// <summary>
     /// Gets or sets main Repo Url for Dalamud Plugin init. Default is PluginRepository.MainRepoUrlDailyRoutines
     /// </summary>
-    public string MainRepoUrl { get; set; } = PluginRepository.MainRepoUrlSoli;
+    public string MainRepoUrl { get; set; } = PluginRepository.MainRepoUrlSoil;
 
     /// <summary>
     /// Gets or sets a value indicating whether gets or sets main Repo Url for Dalamud Plugin init. Default is PluginRepository.MainRepoUrlDailyRoutines

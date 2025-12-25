@@ -174,9 +174,9 @@ internal class SettingsTabPlugin : SettingsTab
 
         ImGui.Text("默认主库");
         
-        if (ImGui.RadioButton("国服 (Daily Routines)", mainRepoUrl == PluginRepository.MainRepoUrlSoli))
+        if (ImGui.RadioButton("国服 (Daily Routines)", mainRepoUrl == PluginRepository.MainRepoUrlSoil))
         {
-            Config.MainRepoUrl = PluginRepository.MainRepoUrlSoli;
+            Config.MainRepoUrl = PluginRepository.MainRepoUrlSoil;
             Config.QueueSave();
             
             _ = Service<PluginManager>.Get().SetPluginReposFromConfigAsync(true);
@@ -205,7 +205,7 @@ internal class SettingsTabPlugin : SettingsTab
         if (ImGui.IsItemDeactivatedAfterEdit())
         {
             if (string.IsNullOrWhiteSpace(mainRepoUrl))
-                mainRepoUrl = PluginRepository.MainRepoUrlSoli;
+                mainRepoUrl = PluginRepository.MainRepoUrlSoil;
                 
             Config.MainRepoUrl = mainRepoUrl;
             Config.QueueSave();
