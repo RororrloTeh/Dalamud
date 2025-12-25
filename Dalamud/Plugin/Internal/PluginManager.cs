@@ -435,8 +435,10 @@ internal class PluginManager : IInternalDisposableService
                            .Where(repo => repo.IsEnabled)
                            .Select(repo => new PluginRepository(this.happyHttpClient, repo.Url, repo.IsEnabled)));
 
-        if (repos.All(x => x.PluginMasterUrl != PluginRepository.AtmoOmenRepoUrl))
-            repos.Add(new(this.happyHttpClient, PluginRepository.AtmoOmenRepoUrl, true));
+        var missingUrls = PluginRepository.PresetRepos
+                                          .ExceptBy(repos.Select(r => r.PluginMasterUrl), url => url, StringComparer.OrdinalIgnoreCase);
+        foreach (var url in missingUrls)
+            repos.Add(new(happyHttpClient, url, true));
 
         this.Repos = repos;
         await this.ReloadPluginMastersAsync(notify);

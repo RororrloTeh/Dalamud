@@ -29,7 +29,22 @@ internal class PluginRepository
         "https://aonyx.ffxiv.wang/Plugin/PluginMaster",
     ];
     
-    public const string AtmoOmenRepoUrl = "https://raw.githubusercontent.com/AtmoOmen/DalamudPlugins/main/pluginmaster.json";
+    // 预置第三方库
+    public static readonly HashSet<string> PresetRepos = new(StringComparer.OrdinalIgnoreCase)
+    {
+        // AtmoOmen
+        "https://gh.atmoomen.top/DalamudPlugins/main/pluginmaster.json",
+        // Nyy
+        "https://gp.xuolu.com/love.json",
+        // Siren
+        "https://raw.githubusercontent.com/extrant/DalamudPlugins/main/pluginmaster.json",
+        // MeowZWR
+        "https://plogon.meowrs.com/cn",
+        // 大刺猬
+        "https://raw.githubusercontent.com/RedAsteroid/DalamudPlugins/main/pluginmaster.json",
+        // 逆光喵
+        "https://raw.githubusercontent.com/NiGuangOwO/DalamudPlugins/main/pluginmaster.json"
+    };
     
     private const int HttpRequestTimeoutSeconds = 20;
 
