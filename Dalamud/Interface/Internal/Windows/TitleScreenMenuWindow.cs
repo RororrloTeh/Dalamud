@@ -507,7 +507,7 @@ internal class TitleScreenMenuWindow : Window, IDisposable
             .PopColorType()
             .PopEdgeColorType()
             .Append($" Dalamud: {Versioning.GetScmVersion()}")
-            .Append($" - 已加载 {count} 个插件");
+            .Append($" - 已加载插件: {count}");
 
         if (pm?.SafeMode is true)
             rssb.Builder.PushColorType(17).Append(" [安全模式]").PopColorType();
