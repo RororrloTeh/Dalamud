@@ -38,7 +38,6 @@ internal partial class ChatHandlers : IServiceType
     private readonly DalamudConfiguration configuration = Service<DalamudConfiguration>.Get();
 
     private bool hasSeenLoadingMsg;
-    private CancellationTokenSource deferredAutoUpdateCts = new();
 
     [ServiceManager.ServiceConstructor]
     private ChatHandlers(ChatGui chatGui)

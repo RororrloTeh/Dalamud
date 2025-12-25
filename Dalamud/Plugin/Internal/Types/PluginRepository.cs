@@ -69,9 +69,8 @@ internal class PluginRepository
             },
         };
 
-        this.httpClient.DefaultRequestHeaders.Add("X-Machine-Token", DeviceUtils.GetDeviceId());
         PluginMasterUrl = pluginMasterUrl;
-        IsThirdParty = pluginMasterUrl != Service<DalamudConfiguration>.Get().MainRepoUrl;
+        IsThirdParty    = pluginMasterUrl != Service<DalamudConfiguration>.Get().MainRepoUrl;
         IsEnabled       = isEnabled;
     }
 

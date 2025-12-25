@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 
 using Dalamud.Plugin.Internal;
 using Dalamud.Utility;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace Dalamud.Networking.Http;
 
@@ -41,7 +40,6 @@ internal class HappyHttpClient : IInternalDisposableService
                 },
             },
         };
-        this.SharedHttpClient.DefaultRequestHeaders.Add("X-Machine-Token", DeviceUtils.GetDeviceId());
     }
     
     /// <summary>

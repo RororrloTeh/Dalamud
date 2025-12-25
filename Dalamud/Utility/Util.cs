@@ -3,15 +3,12 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Numerics;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -465,26 +462,7 @@ public static partial class Util
     /// <returns>If Windows 11 has been detected.</returns>
     public static bool IsWindows11() => Environment.OSVersion.Version.Build >= 22000;
 
-    /// <summary>
-    /// Set the proxy.
-    /// </summary>
-    /// <param name="useManualProxy">System proxy/Manual proxy.</param>
-    /// <param name="proxyProtocol">The protocol of proxy.</param>
-    /// <param name="proxyHost">The proxy host.</param>
-    /// <param name="proxyPort">The proxy port.</param>
-    public static void SetProxy(bool useManualProxy, string proxyProtocol, string proxyHost, int proxyPort)
-    {
-        if (useManualProxy)
-        {
-            var proxy = new WebProxy($"{proxyProtocol}://{proxyHost}:{proxyPort}", true);
-            WebRequest.DefaultWebProxy = proxy;
-            HttpClient.DefaultProxy = proxy;
-        }
-
-    }
-
     /// Open a link in the default browser, and attempts to focus the newly launched application.
-    /// </summary>
     /// <param name="url">The link to open.</param>
     public static void OpenLink(string url) => new Thread(static url =>
     {

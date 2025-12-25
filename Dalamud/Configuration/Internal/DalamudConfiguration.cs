@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Dalamud.Game.Text;
 using Dalamud.Interface;
 using Dalamud.Interface.FontIdentifier;
-using Dalamud.Interface.ImGuiNotification.Internal;
 using Dalamud.Interface.Internal;
 using Dalamud.Interface.Internal.ReShadeHandling;
 using Dalamud.Interface.Style;
@@ -22,7 +21,6 @@ using Dalamud.Plugin.Internal.Types;
 using Dalamud.Storage;
 using Dalamud.Utility;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using Serilog.Events;
 using Windows.Win32.UI.WindowsAndMessaging;
@@ -373,13 +371,7 @@ internal sealed class DalamudConfiguration : IInternalDisposableService
     /// Gets or sets a value indicating whether market board data should be uploaded.
     /// </summary>
     public bool IsMbCollect { get; set; } = true;
-
-    /// <summary>
-    /// Gets the accepted TOS hash.
-    /// </summary>
-    public string AcceptedTOSHash { get; set; } = string.Empty;
-
-
+    
     /// <summary>
     /// Gets the ISO 639-1 two-letter code for the language of the effective Dalamud display language.
     /// </summary>
@@ -474,7 +466,7 @@ internal sealed class DalamudConfiguration : IInternalDisposableService
     /// <summary>
     /// Gets or sets a value indicating how auto-updating should behave.
     /// </summary>
-    public AutoUpdateBehavior? AutoUpdateBehavior { get; set; } = null;
+    public AutoUpdateBehavior? AutoUpdateBehavior { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether users should be notified regularly about pending updates.
