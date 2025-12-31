@@ -435,10 +435,13 @@ internal class PluginManager : IInternalDisposableService
                            .Where(repo => repo.IsEnabled)
                            .Select(repo => new PluginRepository(this.happyHttpClient, repo.Url, repo.IsEnabled)));
 
-        var missingUrls = PluginRepository.PresetRepos
-                                          .ExceptBy(repos.Select(r => r.PluginMasterUrl), url => url, StringComparer.OrdinalIgnoreCase);
-        foreach (var url in missingUrls)
-            repos.Add(new(happyHttpClient, url, true));
+        if (Service<DalamudConfiguration>.Get().AddPresetThirdRepos)
+        {
+            var missingUrls = PluginRepository.PresetRepos
+                                              .ExceptBy(repos.Select(r => r.PluginMasterUrl), url => url, StringComparer.OrdinalIgnoreCase);
+            foreach (var url in missingUrls)
+                repos.Add(new(happyHttpClient, url, true));
+        }
 
         this.Repos = repos;
         await this.ReloadPluginMastersAsync(notify);

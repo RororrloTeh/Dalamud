@@ -418,6 +418,24 @@ internal class SettingsTabPlugin : SettingsTab
 
         if (!string.IsNullOrEmpty(this.thirdRepoAddError))
             ImGui.TextColoredWrapped(ImGuiColors.DalamudRed, this.thirdRepoAddError);
+        
+        ImGuiHelpers.ScaledDummy(15f);
+
+        ImGui.Separator();
+        
+        ImGuiHelpers.ScaledDummy(15f);
+        
+        var addPresetRepos = Config.AddPresetThirdRepos;
+        if (ImGui.Checkbox("添加预置第三方插件仓库", ref addPresetRepos))
+        {
+            Config.AddPresetThirdRepos = addPresetRepos;
+            Config.QueueSave();
+        }
+        
+        ImGui.TextColoredWrapped(ImGuiColors.DalamudGrey, 
+                                 "添加一批来自 Dalamud (Soil) 相关人员维护的第三方插件仓库");
+        
+        ImGuiHelpers.ScaledDummy(15f);
     }
 
     private void DrawLocalPluginTabItem()

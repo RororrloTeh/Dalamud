@@ -123,16 +123,21 @@ internal sealed class DalamudConfiguration : IInternalDisposableService
     /// Gets or sets a list of custom repos.
     /// </summary>
     public List<ThirdPartyRepoSettings> ThirdRepoList { get; set; } = [];
+    
+    /// <summary>
+    /// Gets or sets a value indicating weather some preset third repos should be added by default
+    /// </summary>
+    public bool AddPresetThirdRepos { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a list of hidden plugins.
     /// </summary>
-    public List<string> HiddenPluginInternalName { get; set; } = new();
+    public List<string> HiddenPluginInternalName { get; set; } = [];
 
     /// <summary>
     /// Gets or sets a list of seen plugins.
     /// </summary>
-    public List<string> SeenPluginInternalName { get; set; } = new();
+    public List<string> SeenPluginInternalName { get; set; } = [];
 
     /// <summary>
     /// Gets or sets a list of additional settings for devPlugins. The key is the absolute path

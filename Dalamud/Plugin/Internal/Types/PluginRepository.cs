@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Dalamud.Configuration.Internal;
 using Dalamud.Logging.Internal;
 using Dalamud.Networking.Http;
@@ -206,16 +207,18 @@ internal class PluginRepository
         if (manifest.TestingAssemblyVersion != null                    &&
             manifest.TestingAssemblyVersion > manifest.AssemblyVersion &&
             manifest.TestingDalamudApiLevel == null)
+        {
             Log.Warning(
                 "仓库 {RepoLink} 中的插件 {PluginName} 有测试版本可用，但未指定测试API版本，需要提供 'TestingDalamudApiLevel' 属性",
                 PluginMasterUrl, manifest.InternalName);
+        }
 
         return true;
     }
 
     private async Task<HttpResponseMessage> GetPluginMaster(string url, int timeout = HttpRequestTimeoutSeconds)
     {
-        var client = Service<HappyHttpClient>.Get().SharedHttpClient;
+        _ = Service<HappyHttpClient>.Get().SharedHttpClient;
 
         var request = new HttpRequestMessage(HttpMethod.Get, url);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
