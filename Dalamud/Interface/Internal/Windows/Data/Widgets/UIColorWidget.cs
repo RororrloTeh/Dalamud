@@ -123,20 +123,22 @@ internal class UiColorWidget : IDataWindowWidget
                     DrawEdgePreview(id, row.ClearBlue, adjacentRow.Value.ClearBlue);
                 ImGui.PopID();
 
+                // REGION TODO: ClearWhite
                 ImGui.TableNextColumn();
                 ImGui.AlignTextToFramePadding();
                 ImGui.PushID($"row{id}_white");
-                if (this.DrawColorColumn(row.ClearWhite) &&
+                if (this.DrawColorColumn(row.Unknown0) &&
                     adjacentRow.HasValue)
-                    DrawEdgePreview(id, row.ClearWhite, adjacentRow.Value.ClearWhite);
+                    DrawEdgePreview(id, row.Unknown0, adjacentRow.Value.Unknown0);
                 ImGui.PopID();
 
+                // REGION TODO: ClearGreen
                 ImGui.TableNextColumn();
                 ImGui.AlignTextToFramePadding();
                 ImGui.PushID($"row{id}_green");
-                if (this.DrawColorColumn(row.ClearGreen) &&
+                if (this.DrawColorColumn(row.Unknown1) &&
                     adjacentRow.HasValue)
-                    DrawEdgePreview(id, row.ClearGreen, adjacentRow.Value.ClearGreen);
+                    DrawEdgePreview(id, row.Unknown1, adjacentRow.Value.Unknown1);
                 ImGui.PopID();
             }
         }
