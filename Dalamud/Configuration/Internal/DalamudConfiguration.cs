@@ -20,9 +20,12 @@ using Dalamud.Plugin.Internal.Profiles;
 using Dalamud.Plugin.Internal.Types;
 using Dalamud.Storage;
 using Dalamud.Utility;
+
 using Newtonsoft.Json;
+
 using Serilog;
 using Serilog.Events;
+
 using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Dalamud.Configuration.Internal;
@@ -102,7 +105,7 @@ internal sealed class DalamudConfiguration : IInternalDisposableService
     /// <summary>
     /// Gets or sets a dictionary of seen FTUE levels.
     /// </summary>
-    public Dictionary<string, int> SeenFtueLevels { get; set; } = new();
+    public Dictionary<string, int> SeenFtueLevels { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the last loaded Dalamud version.
@@ -123,7 +126,7 @@ internal sealed class DalamudConfiguration : IInternalDisposableService
     /// Gets or sets a list of custom repos.
     /// </summary>
     public List<ThirdPartyRepoSettings> ThirdRepoList { get; set; } = [];
-    
+
     /// <summary>
     /// Gets or sets a value indicating weather some preset third repos should be added by default
     /// </summary>
@@ -145,14 +148,14 @@ internal sealed class DalamudConfiguration : IInternalDisposableService
     /// However by specifiying this value manually, you can add arbitrary files outside the normal
     /// file paths.
     /// </summary>
-    public Dictionary<string, DevPluginSettings> DevPluginSettings { get; set; } = new();
+    public Dictionary<string, DevPluginSettings> DevPluginSettings { get; set; } = [];
 
     /// <summary>
     /// Gets or sets a list of additional locations that dev plugins should be loaded from. This can
     /// be either a DLL or folder, but should be the absolute path, or a path relative to the currently
     /// injected Dalamud instance.
     /// </summary>
-    public List<DevPluginLocationSettings> DevPluginLoadLocations { get; set; } = new();
+    public List<DevPluginLocationSettings> DevPluginLoadLocations { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the global UI scale.
@@ -234,7 +237,7 @@ internal sealed class DalamudConfiguration : IInternalDisposableService
     /// <summary>
     /// Gets or sets a list representing the command history for the Dalamud Console.
     /// </summary>
-    public List<string> LogCommandHistory { get; set; } = new();
+    public List<string> LogCommandHistory { get; set; } = [];
 
     /// <summary>
     /// Gets or sets a value indicating whether the dev bar should open at startup.
@@ -605,7 +608,7 @@ internal sealed class DalamudConfiguration : IInternalDisposableService
         {
             // https://source.chromium.org/chromium/chromium/src/+/main:ui/gfx/animation/animation_win.cc;l=29?q=ReducedMotion&ss=chromium
             var winAnimEnabled = 0;
-            var success = false;
+            bool success;
             unsafe
             {
                 success = Windows.Win32.PInvoke.SystemParametersInfo(
