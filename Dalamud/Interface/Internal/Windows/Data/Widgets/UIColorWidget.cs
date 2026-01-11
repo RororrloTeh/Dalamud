@@ -127,22 +127,20 @@ internal class UiColorWidget : IDataWindowWidget
                         DrawEdgePreview(id, row.ClearBlue, adjacentRow.Value.ClearBlue);
                 }
 
-                // REGION TODO: Unknown0 - ClearWhite
                 ImGui.TableNextColumn();
                 ImGui.AlignTextToFramePadding();
                 using (ImRaii.PushId($"row{id}_white"))
                 {
-                    if (this.DrawColorColumn(row.Unknown0) && adjacentRow.HasValue)
-                        DrawEdgePreview(id, row.Unknown0, adjacentRow.Value.Unknown0);
+                    if (this.DrawColorColumn(row.ClearWhite) && adjacentRow.HasValue)
+                        DrawEdgePreview(id, row.ClearWhite, adjacentRow.Value.ClearWhite);
                 }
 
-                // REGION TODO: Unknown1 - ClearGreen
                 ImGui.TableNextColumn();
                 ImGui.AlignTextToFramePadding();
                 using (ImRaii.PushId($"row{id}_green"))
                 {
-                    if (this.DrawColorColumn(row.Unknown1) && adjacentRow.HasValue)
-                        DrawEdgePreview(id, row.Unknown1, adjacentRow.Value.Unknown1);
+                    if (this.DrawColorColumn(row.ClearGreen) && adjacentRow.HasValue)
+                        DrawEdgePreview(id, row.ClearGreen, adjacentRow.Value.ClearGreen);
                 }
             }
         }
