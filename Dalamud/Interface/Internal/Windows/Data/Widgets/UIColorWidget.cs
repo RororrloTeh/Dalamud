@@ -133,7 +133,7 @@ internal class UiColorWidget : IDataWindowWidget
                 using (ImRaii.PushId($"row{id}_white"))
                 {
                     if (this.DrawColorColumn(row.Unknown0) && adjacentRow.HasValue)
-                        DrawEdgePreview(id, row.Unknown0, adjacentRow.Value.ClearWhite);
+                        DrawEdgePreview(id, row.Unknown0, adjacentRow.Value.Unknown0);
                 }
 
                 // REGION TODO: Unknown1 - ClearGreen
@@ -142,7 +142,7 @@ internal class UiColorWidget : IDataWindowWidget
                 using (ImRaii.PushId($"row{id}_green"))
                 {
                     if (this.DrawColorColumn(row.Unknown1) && adjacentRow.HasValue)
-                        DrawEdgePreview(id, row.Unknown1, adjacentRow.Value.ClearGreen);
+                        DrawEdgePreview(id, row.Unknown1, adjacentRow.Value.Unknown1);
                 }
             }
         }
