@@ -27,11 +27,7 @@ internal unsafe class AddonLifecycle : IInternalDisposableService
 
     private static readonly ModuleLog Log = ModuleLog.Create<AddonLifecycle>();
 
-    [ServiceManager.ServiceDependency]
-    private readonly Framework framework = Service<Framework>.Get();
-
     private Hook<AtkUnitBase.Delegates.Initialize>? onInitializeAddonHook;
-    private bool isInvokingListeners = false;
 
     [ServiceManager.ServiceConstructor]
     private AddonLifecycle()
@@ -62,23 +58,20 @@ internal unsafe class AddonLifecycle : IInternalDisposableService
     /// <param name="listener">The listener to register.</param>
     internal void RegisterListener(AddonLifecycleEventListener listener)
     {
-        this.framework.RunOnTick(() =>
+        if (!this.EventListeners.ContainsKey(listener.EventType))
         {
-            if (!this.EventListeners.ContainsKey(listener.EventType))
-            {
-                if (!this.EventListeners.TryAdd(listener.EventType, []))
-                    return;
-            }
+            if (!this.EventListeners.TryAdd(listener.EventType, []))
+                return;
+        }
 
-            // Note: string.Empty is a valid addon name, as that will trigger on any addon for this event type
-            if (!this.EventListeners[listener.EventType].ContainsKey(listener.AddonName))
-            {
-                if (!this.EventListeners[listener.EventType].TryAdd(listener.AddonName, []))
-                    return;
-            }
+        // Note: string.Empty is a valid addon name, as that will trigger on any addon for this event type
+        if (!this.EventListeners[listener.EventType].ContainsKey(listener.AddonName))
+        {
+            if (!this.EventListeners[listener.EventType].TryAdd(listener.AddonName, []))
+                return;
+        }
 
-            this.EventListeners[listener.EventType][listener.AddonName].Add(listener);
-        }, delayTicks: this.isInvokingListeners ? 1 : 0);
+        this.EventListeners[listener.EventType][listener.AddonName].Add(listener);
     }
 
     /// <summary>
@@ -87,16 +80,13 @@ internal unsafe class AddonLifecycle : IInternalDisposableService
     /// <param name="listener">The listener to unregister.</param>
     internal void UnregisterListener(AddonLifecycleEventListener listener)
     {
-        this.framework.RunOnTick(() =>
+        if (this.EventListeners.TryGetValue(listener.EventType, out var addonListeners))
         {
-            if (this.EventListeners.TryGetValue(listener.EventType, out var addonListeners))
+            if (addonListeners.TryGetValue(listener.AddonName, out var addonListener))
             {
-                if (addonListeners.TryGetValue(listener.AddonName, out var addonListener))
-                {
-                    addonListener.Remove(listener);
-                }
+                addonListener.Remove(listener);
             }
-        }, delayTicks: this.isInvokingListeners ? 1 : 0);
+        }
     }
 
     /// <summary>
@@ -107,8 +97,6 @@ internal unsafe class AddonLifecycle : IInternalDisposableService
     /// <param name="blame">What to blame on errors.</param>
     internal void InvokeListenersSafely(AddonEvent eventType, AddonArgs args, [CallerMemberName] string blame = "")
     {
-        this.isInvokingListeners = true;
-
         // Early return if we don't have any listeners of this type
         if (!this.EventListeners.TryGetValue(eventType, out var addonListeners)) return;
 
@@ -143,8 +131,6 @@ internal unsafe class AddonLifecycle : IInternalDisposableService
                 }
             }
         }
-
-        this.isInvokingListeners = false;
     }
 
     /// <summary>
